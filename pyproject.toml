@@ -1,0 +1,44 @@
+[project]
+name = "pixai-tagger"
+version = "0.1.0"
+description = "Image tagger with model"
+readme = "README.md"
+authors = [{ name = "ARGI-BERRI", email = "me@endroit.net" }]
+requires-python = ">=3.13,<3.14"
+dependencies = [
+    "fastapi[standard]>=0.143.0",
+    "loguru>=0.7.3",
+    "rocm[device-gfx1201,libraries]==10.1.0",
+    "sixel",
+    "timm>=1.0.30",
+    "torch[device-gfx1201]==2.14.0+rocm10.1.0",
+    "torchaudio==2.11.0.3+rocm10.1.0",
+    "torchvision[device-gfx1201]==0.29.0a0+rocm10.1.0",
+    "transformers>=5.19.0",
+    "triton-windows>=3.8.0.post29",
+    "typer>=0.27.3",
+]
+
+[project.scripts]
+pixai-tagger = "pixai_tagger:main"
+
+[build-system]
+requires = ["uv_build>=0.12.23,<0.13.0"]
+build-backend = "uv_build"
+
+[tool.uv]
+override-dependencies = [
+    "triton==3.8.0+git669b31ac.rocm10.1.0; sys_platform == 'linux'",
+]
+
+[tool.uv.build-backend]
+module-root = ""
+
+[[tool.uv.index]]
+name = "pytorch-rocm"
+url = "https://stable.repo.amd.com/rocm/whl-next/"
+ignore-error-codes = [403]
+
+[tool.uv.sources]
+"rocm" = { index = "pytorch-rocm" }
+sixel = { git = "https://github.com/sbamboo/python-sixel.git" }
